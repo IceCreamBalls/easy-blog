@@ -1,0 +1,22 @@
+spring:
+  cloud:
+    nacos:
+      config:
+        server-addr: 119.3.108.18:8848
+        username: nacos
+        password: nacos
+        extension-configs[0]:
+          data-id: email.yml
+          group: DEFAULT_GROUP
+          refresh: true
+
+      discovery:
+        server-addr: 119.3.108.18:8848
+
+
+
+  application:
+    name: blog-email
+
+server:
+  port: 8100

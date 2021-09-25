@@ -1,0 +1,26 @@
+# Nacos帮助文档: https://nacos.io/zh-cn/docs/concepts.html
+# Nacos认证信息
+spring:
+  cloud:
+    nacos:
+      config:
+        server-addr: 119.3.108.18:8848
+        username: nacos
+        password: nacos
+        # 自定义拓展配置
+        # 通用配置、mysql
+        extension-configs[0]:
+          data-id: common.yml
+          group: DEFAULT_GROUP
+          refresh: false
+
+
+      discovery:
+        server-addr: 119.3.108.18:8848
+
+
+  application:
+    name: blog-user
+
+server:
+  port: 8090
