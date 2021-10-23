@@ -2,6 +2,9 @@ package com.ice.easy.blog.user.entity;
 
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,6 +21,9 @@ import lombok.EqualsAndHashCode;
 public class Users implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    @TableId
+    private Integer id;
 
     /**
      * 用户昵称
@@ -42,17 +48,21 @@ public class Users implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime createAt;
+    private String createAt;
 
     /**
      * 修改时间
      */
-    private LocalDateTime updateAt;
+    private String updateAt;
 
     /**
      * 是否可用
      */
     private Integer deleteFlag;
 
+    /**
+     * 邮箱
+     */
+    private String email;
 
 }

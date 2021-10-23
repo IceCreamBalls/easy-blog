@@ -25,6 +25,8 @@
         <module>codegenerator</module>
         <!-- 通用模块 -->
         <module>commen</module>
+        <!-- 文章模块       -->
+        <module>easy-article</module>
     </modules>
 
 </project>

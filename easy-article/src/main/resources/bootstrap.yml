@@ -10,23 +10,23 @@ spring:
         # 自定义拓展配置
         # 通用配置、mysql
         extension-configs[0]:
-          data-id: commen.yml
+          data-id: database_blog_article.yml
           group: DEFAULT_GROUP
           refresh: false
 
-#        extension-configs[1]:
-#          data-id: salt.yml
-#          group: DEFAULT_GROUP
-#          refresh: true
+      #        extension-configs[1]:
+      #          data-id: salt.yml
+      #          group: DEFAULT_GROUP
+      #          refresh: true
 
       discovery:
         server-addr: 119.3.108.18:8848
 
   application:
-    name: blog-user
+    name: easy-article
 
 server:
-  port: 8090
+  port: 8100
 
 
 
