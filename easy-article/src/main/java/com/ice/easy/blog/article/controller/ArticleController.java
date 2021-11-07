@@ -1,9 +1,12 @@
 package com.ice.easy.blog.article.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.ice.blog.vo.R;
+import com.ice.easy.blog.article.entity.Article;
+import com.ice.easy.blog.article.mapper.ArticleMapper;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
+import javax.annotation.Resource;
 
 /**
  * <p>
@@ -14,7 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-10-23
  */
 @RestController
-@RequestMapping("/article/article")
+@RequestMapping("/article")
 public class ArticleController {
+    @Resource
+    ArticleMapper articleMapper;
 
+
+    @PostMapping(path = "/insert")
+    public R insertArticle(@RequestBody Article article){
+        int i = articleMapper.insert(article);
+        return i > 0 ? R.ok("新增成功") : R.error("新增失败");
+    }
 }

@@ -3,11 +3,13 @@ package com.ice.easy.blog.user.config;
 import com.ice.easy.blog.user.filter.BlogBasicAuthenticationFilter;
 import com.ice.easy.blog.user.filter.BlogUserNamePasswordAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -19,15 +21,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     @Resource
     BlogUserDetailService blogUserDetailService;
 
+    @Bean
+    PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder(16);
+    }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(blogUserDetailService).passwordEncoder(new BCryptPasswordEncoder(16));
+        auth.userDetailsService(blogUserDetailService);
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests(authorize -> authorize
-                        .antMatchers("/login","/signin","logout").permitAll()
+                        .antMatchers("/signin","logout","/checkCode").permitAll()
                         .anyRequest().authenticated()
         ).csrf().disable().cors().and()
         .addFilter(new BlogUserNamePasswordAuthenticationFilter(authenticationManager()))

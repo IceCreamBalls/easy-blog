@@ -42,22 +42,22 @@ public class Article implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime createTime;
+    private String createTime;
 
     /**
      * 创建时间
      */
-    private LocalDateTime createDate;
+    private String createDate;
 
     /**
      * 修改时间
      */
-    private LocalDateTime updateBy;
+    private String updateBy;
 
     /**
      * 发布时间
      */
-    private LocalDateTime releaseAt;
+    private String releaseAt;
 
 
 }

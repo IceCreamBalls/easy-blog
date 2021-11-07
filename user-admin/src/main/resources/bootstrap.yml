@@ -10,7 +10,7 @@ spring:
         # 自定义拓展配置
         # 通用配置、mysql
         extension-configs[0]:
-          data-id: commen.yml
+          data-id: database_blog_user.yml
           group: DEFAULT_GROUP
           refresh: false
 

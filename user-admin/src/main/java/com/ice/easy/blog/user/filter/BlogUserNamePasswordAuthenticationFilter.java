@@ -11,6 +11,7 @@ import com.ice.easy.blog.user.utils.JWTUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -18,6 +19,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+
 import javax.annotation.Resource;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -51,9 +54,16 @@ public class BlogUserNamePasswordAuthenticationFilter extends UsernamePasswordAu
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
             Map map = new ObjectMapper().readValue(request.getInputStream(), Map.class);
-            return authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(map.get("username"), map.get("password"))
-            );
+            String checkCode = (String) map.get("checkCode");
+            String checkCode1 = (String) request.getSession().getAttribute("checkCode");
+            if(!StringUtils.isEmpty(checkCode) && !StringUtils.isEmpty(checkCode1) && checkCode1.equalsIgnoreCase(checkCode)){
+                return authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(map.get("username"), map.get("password"))
+                );
+            }
+
+            throw new AuthenticationServiceException("验证码输入错误");
+
         } catch (Exception e) {
             e.printStackTrace();
             responseErrJson(response, R.error("登录失败"));
@@ -93,12 +103,10 @@ public class BlogUserNamePasswordAuthenticationFilter extends UsernamePasswordAu
         try {
             SecurityContextHolder.getContext().setAuthentication(authResult);
             Collection<? extends GrantedAuthority> authorities = authResult.getAuthorities();
-            String name = authResult.getName();
             Object principal = authResult.getPrincipal();
             JSONObject user2Token = JSONObject.parseObject(JSON.toJSONString(principal));
             String token = JWTUtils.generateTokenExpireInMinutes(user2Token, "hgbtcb", 20);
             responseErrJson(response, R.ok(token));
-//            chain.doFilter(request, response);
         } catch (Exception e) {
             e.printStackTrace();
             responseErrJson(response, R.error("失败"));

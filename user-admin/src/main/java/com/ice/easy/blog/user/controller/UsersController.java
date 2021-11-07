@@ -4,6 +4,7 @@ package com.ice.easy.blog.user.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.google.code.kaptcha.Producer;
 import com.ice.blog.vo.R;
 import com.ice.easy.blog.user.entity.Users;
 import com.ice.easy.blog.user.mapper.UsersMapper;
@@ -15,8 +16,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 /**
  * <p>
@@ -33,6 +39,9 @@ public class UsersController {
     IUsersService iUsersService;
     @Resource
     private UsersMapper usersMapper;
+
+    @Resource
+    Producer producer;
 
     @PostMapping(value = "/signin", produces = MediaType.APPLICATION_JSON_VALUE)
     public R signIn(@RequestBody Users users) {
@@ -73,5 +82,19 @@ public class UsersController {
         }
         return R.ok();
     }
+
+    @GetMapping("/checkCode")
+    public  void getVerifyCode(HttpServletResponse response, HttpSession session){
+        response.setContentType("image/jpeg");
+        String text = producer.createText();
+        session.setAttribute("checkCode",text);
+        BufferedImage image = producer.createImage(text);
+        try(ServletOutputStream out = response.getOutputStream()){
+            ImageIO.write(image, "jpg", out);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

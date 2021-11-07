@@ -33,6 +33,11 @@ public class BlogBasicAuthenticationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         String token = request.getHeader("token");
+
+        if("/signin".equals(request.getServletPath()) || "/checkCode".equals(request.getServletPath())){
+            chain.doFilter(request, response);
+        }
+
         if(token == null){
             response.setContentType("application/json;charset=utf-8");
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
